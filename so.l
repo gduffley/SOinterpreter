@@ -10,8 +10,16 @@ int myAtoi(char[]);
 %%
 [ ]             {}
 [0123456789]+   yylval = atoi( yytext ); return NUM;
+	/* plus			char op[] = {'+'}; return *op; */
+minus			return (double)'-'; 
+	/* divide			return (double)'/'; */
+	/* multiply		return (double)'*'; */
+
 [(zero)(one)(two)(three)(four)(five)(six)(seven)(eight)(nine)]*(point)?[(zero)(one)(two)(three)(four)(five)(six)(seven)(eight)(nine)]* yylval = myAtoi(yytext); return NUM;
-.               return (int) yytext[0];
+
+.               return (int) yytext[0]; 
+
+[a-zA-Z]+	yylval = *yytext; return STR; 
 %%
 
 int yywrap(void)

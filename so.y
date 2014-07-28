@@ -8,6 +8,7 @@
 #include <ctype.h>
 
 
+
 /* prototypes */
 void yyerror (char* s);
 int yylex(void);
@@ -18,6 +19,8 @@ int yylex(void);
 %start input  /* what rule starts */
 
 %token NUM
+%token STR
+%token OP
 
 %left '-' '+' /* these done for precdence */
 %left '*' '/'
@@ -37,13 +40,16 @@ line:     '\n'               { printf(" "); }
         ;
 
 exp:      NUM                { $$ = $1;         }
-        | exp '+' exp        { $$ = $1 + $3;    }
+        | exp '+' exp         { $$ = $1 + $3;    }
         | exp '-' exp        { $$ = $1 - $3;    }
         | exp '*' exp        { $$ = $1 * $3;    }
         | exp '/' exp        { $$ = $1 / $3;    }
         | exp '^' exp        { $$ = pow ($1, $3); }
         | '(' exp ')'        { $$ = $2;         }
 ;
+
+var:     STR                 {}
+        
 
 %%
 
