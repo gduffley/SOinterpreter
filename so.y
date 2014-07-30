@@ -57,7 +57,7 @@ line:     '\n'              { printf(" "); }
         | PRINT exp';'      { printf("%s\n", $2);}      
         ;
 
-exp:      STRING             { $$ = $1;             }
+exp:      STRING             { $$ = $1; }             
         | VAR                { $$  = sym[$1]        }
         | exp PLUS exp       { $$ = plus($1, $3);   }
         | exp SUB exp        { $$ = sub($1 , $3);   }
@@ -146,7 +146,9 @@ int myAtoi(char yytext[]){
 }
 
 char* plus(char* s1, char* s2){
+    printf("%s + %s\n", s1, s2);
     return s1;
+
 }
 
 char* sub(char* s1, char* s2){

@@ -18,17 +18,19 @@ int myAtoi(char yytext[]);
 "minus"				return SUB; 
 "divide"			return DIV; 
 "multiply"			return MULT;
-eq 					return EQ; 
-gt					return GT;
-ge					return GE;
-lt					return LT;
-le					return LE;
-eqeq				return EE;
-!eq					return NE;
-while				return WHILE;
-if					return IF;
-print				return PRINT;
-"[A-Za-z]*"			{strcpy(yylval.sval, yytext);
+"eq" 				return EQ; 
+"gt"				return GT;
+"ge"				return GE;
+"lt"				return LT;
+"le"				return LE;
+"eqeq"				return EE;
+"!eq"				return NE;
+"while"				return WHILE;
+"if"				return IF;
+"print"				return PRINT;
+[A-Za-z]*			{
+					yylval.sval = (char *)malloc(strlen(yytext)*sizeof(char));
+					strcpy(yylval.sval, yytext);
 					return STRING;}
 
 [ \t\n]+ 			; /* ignore whitespace */ 
