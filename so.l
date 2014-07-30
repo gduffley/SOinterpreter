@@ -1,25 +1,38 @@
 %{
-#include "global.h"
-#include "so.tab.h"
 #include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-int myAtoi(char[]);
+#include <string.h>
+void yyerror(char *);
+int myAtoi(char yytext[]);
 %}
 
 %%
+
 [ ]             {}
-[0123456789]+   yylval = atoi( yytext ); return NUM;
-	/* plus			char op[] = {'+'}; return *op; */
-minus			return (double)'-'; 
-	/* divide			return (double)'/'; */
-	/* multiply		return (double)'*'; */
+[a-z] {
+	yylval.sIndex = strdup(yytext + 1);
+	return VAR;
+}
+"plus"				return PLUS;
+"minus"				return SUB; 
+"divide"			return DIV; 
+"multiply"			return MULT;
+eq 					return EQ; 
+gt					return GT;
+ge					return GE;
+lt					return LT;
+le					return LE;
+eqeq				return EE;
+!eq					return NE;
+while				return WHILE;
+if					return IF;
+else				return ELSE;
+print				return PRINT;
+"[A-Za-z]*"			{strcpy(yylval.sval, yytext);
+					return STRING;}
 
-[(zero)(one)(two)(three)(four)(five)(six)(seven)(eight)(nine)]*(point)?[(zero)(one)(two)(three)(four)(five)(six)(seven)(eight)(nine)]* yylval = myAtoi(yytext); return NUM;
-
-.               return (int) yytext[0]; 
-
-[a-zA-Z]+	yylval = *yytext; return STR; 
+[ \t\n]+ 			; /* ignore whitespace */ 
+[;{}.()]			return *yytext;
+.               	yyerror("Unknown character");
 %%
 
 int yywrap(void)
@@ -90,12 +103,6 @@ int myAtoi(char yytext[]){
 				break;
 		}
 	}
-	//printf("String is: %s\n", numString);
-	double num = atof(numString);
-	//printf("Before the division: %f\n", num);
-	if(digDecisAt > 0){
-		num = num / pow (10, strlen(numString) - digDecisAt);
-	}
-	printf("Final number: %f\n", num);
-	return num;
+	int num = atoi(numString);
+	return atoi(numString);
 }
