@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "global.h"
+#include <regex.h>
+#include <string.h>
 
 /* prototypes */
 void yyerror (char* s);
@@ -15,7 +17,7 @@ int myAtoi(char[]);
 char* plus(char* s1, char* s2);
 char* sub(char* s1, char* s2);
 char* mult(char* s1, char* s2);
-char* div(char* s1, char* s2);
+char* divi(char* s1, char* s2);
 
 
 
@@ -26,7 +28,7 @@ char* div(char* s1, char* s2);
 
 %start input  /* what rule starts */
 
-%token PRINT VAR STRING 
+%token PRINT STRING WHILE IF 
 
 %left GE LE EQ NE GT LT EE 
 %left PLUS SUB /* these done for precdence */
@@ -41,6 +43,7 @@ char* div(char* s1, char* s2);
 %type <sval> STRING exp 
 %token <sIndex> VAR 
 /* Grammar follows */
+
 %%
 input:    /* empty string */
         | input line 
@@ -58,8 +61,8 @@ exp:      STRING             { $$ = $1;             }
         | VAR                { $$  = sym[$1]        }
         | exp PLUS exp       { $$ = plus($1, $3);   }
         | exp SUB exp        { $$ = sub($1 , $3);   }
-        | exp MULT exp       { $$ = mult($1, $3;    }
-        | exp DIV exp        { $$ = div($1, $3;     }
+        | exp MULT exp       { $$ = mult($1, $3);    }
+        | exp DIV exp        { $$ = divi($1, $3);     }
         | '(' exp ')'        { $$ = $2;             }
 
 ;
@@ -82,7 +85,7 @@ int myAtoi(char yytext[]){
     char numString[50];
     strcpy (numString, "");
     //printf("original string : %s\n", yytext);
-    while(i < yyleng){
+    while(i < strlen(yytext)){
         cur = yytext[i];
         //printf("current char %c\n", yytext[i]);
         switch (cur){
@@ -142,7 +145,20 @@ int myAtoi(char yytext[]){
     return atoi(numString);
 }
 
-char * plus(char* s1, char*s2){
-    
+char* plus(char* s1, char* s2){
+    return s1;
 }
+
+char* sub(char* s1, char* s2){
+    return s1;
+}
+
+char* divi(char* s1, char* s2){
+    return s1;
+}
+
+char* mult(char* s1, char* s2){
+    return s1;
+}
+
 
