@@ -28,9 +28,10 @@ int myAtoi(char yytext[]);
 "while"				return WHILE;
 "if"				return IF;
 "print"				return PRINT;
-[A-Za-z]*			{
-					yylval.sval = (char *)malloc(strlen(yytext)*sizeof(char));
-					strcpy(yylval.sval, yytext);
+\"[A-Za-z]+\"		{
+					yylval.sval = (char *)malloc((strlen(yytext) - 1)*sizeof(char));
+					memcpy(yylval.sval, &yytext[1], strlen(yytext) - 2);
+					yylval.sval[strlen(yylval.sval)] = '\0';
 					return STRING;}
 
 [ \t\n]+ 			; /* ignore whitespace */ 

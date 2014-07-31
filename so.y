@@ -18,7 +18,12 @@ char* plus(char* s1, char* s2);
 char* sub(char* s1, char* s2);
 char* mult(char* s1, char* s2);
 char* divi(char* s1, char* s2);
+int matchesNum(char* s, char* num, int i);
+int isNum(char* s);
+char* toString(int n, char* numStr);
 
+#define true 1
+#define false 0
 
 
 %}
@@ -78,15 +83,152 @@ void yyerror (char *s)  /* Called by yyparse on error */
   printf ("%s\n", s);
 }
 
-int myAtoi(char yytext[]){
-    char cur = yytext[0];
+
+char* plus(char* s1, char* s2){
+    //printf("s1 : |%s|, s2: |%s|\n", s1, s2);
+    if(isNum(s1) && isNum(s2)){
+        int s1num = myAtoi(s1);
+        int s2num = myAtoi(s2);
+        //printf("s1: %i, s2: %i\n", s1num, s2num);
+        int sum = s1num + s2num;
+        //printf("sum: %i\n", sum);
+        char* numStr = (char*) malloc(sizeof(char) *100);
+        toString(sum, numStr);
+        return numStr;
+    }
+    return strcat(s1, s2); 
+
+}
+
+char* sub(char* s1, char* s2){
+    return s1;
+}
+
+char* divi(char* s1, char* s2){
+    return s1;
+}
+
+char* mult(char* s1, char* s2){
+    return s1;
+}
+
+int isNum(char* s){
+    if(strlen(s) == 1) return false;
+    char cur = s[0];
     int i = 0;
     int digDecisAt = 0;
     char numString[50];
     strcpy (numString, "");
     //printf("original string : %s\n", yytext);
-    while(i < strlen(yytext)){
-        cur = yytext[i];
+    while(i < strlen(s)){
+        cur = s[i];
+        //printf("current char %c\n", yytext[i]);
+        switch (cur){
+            case 'z':
+                if(! matchesNum(s, "zero", i)) return false;
+                i += 4; 
+                break;
+            case 'o':
+                if(! matchesNum(s, "one", i)) return false; 
+                i += 3;
+                break;
+            case 't':
+                if (matchesNum(s, "two", i)){
+                    i+= 3;
+                    break;
+                } 
+                if (matchesNum(s, "three", i)){
+                    i+= 5;
+                    break;
+                }
+                return false;
+            case 'f':
+                if(! (matchesNum(s, "four", i) || matchesNum(s, "five", i))) return false;
+                i += 4;
+                break;
+            case 's':
+                if(matchesNum(s, "six", i)){
+                    i += 3;
+                    break;
+                }
+                if(matchesNum(s, "seven", i)){
+                    i += 5;
+                    break;
+                }
+                return false;
+            case 'e':
+                if(! matchesNum(s, "eight", i)) return false;
+                i += 5;
+                break;
+            case 'n':
+                if(! matchesNum(s, "nine", i)) return false;
+                i += 4;
+                break;
+            default:
+                return false;
+        }
+    }
+    return true;
+}
+
+int matchesNum(char* s, char* num, int i){
+    for(int j = 0; j < strlen(num); j++){
+        if(!((i + j) < strlen(s) && s[i + j] == num[j])) return false;
+    }
+    return true; 
+}
+
+char* toString(int n, char* numStr){
+    char str[100];
+    sprintf(str, "%d", n);
+    //printf("%s = str\n", str);
+    strcpy(numStr, "");
+    for(int i = 0; i < strlen(str); i++){
+        char cur = str[i];
+        switch(cur){
+            case '0':
+                strcat(numStr, "zero");
+                break;
+            case '1':
+                strcat(numStr, "one");
+                break;
+            case '2':
+                strcat(numStr, "two");
+                break;
+            case '3':
+                strcat(numStr, "three");
+                break;
+            case '4':
+                strcat(numStr, "four");
+                break;
+            case '5':
+                strcat(numStr, "five");
+                break;
+            case '6':
+                strcat(numStr, "six");
+                break;
+            case '7':
+                strcat(numStr, "seven");
+                break;
+            case '8':
+                strcat(numStr, "eight");
+                break;
+            case '9':
+                strcat(numStr, "nine");
+                break;
+        }
+    }
+    return numStr;
+}
+
+int myAtoi(char* s){
+    char cur = s[0];
+    int i = 0;
+    char numString[50];
+    strcpy (numString, "");
+    //printf("original string : %s\n", yytext);
+    while(i < strlen(s)){
+        cur = s[i];
         //printf("current char %c\n", yytext[i]);
         switch (cur){
             case 'z':
@@ -98,7 +240,7 @@ int myAtoi(char yytext[]){
                 i += 3;
                 break;
             case 't':
-                if (yytext[i + 1] == 'w'){
+                if (s[i + 1] == 'w'){
                     strcat (numString, "2");
                     i += 3;
                 }
@@ -108,7 +250,7 @@ int myAtoi(char yytext[]){
                 }
                 break;
             case 'f':
-                if( yytext[i + 1] == 'o'){
+                if( s[i + 1] == 'o'){
                     strcat (numString, "4");
                     i += 4;
                 }
@@ -118,7 +260,7 @@ int myAtoi(char yytext[]){
                 }
                 break;
             case 's':
-                if(yytext[i + 1] == 'i'){
+                if(s[i + 1] == 'i'){
                     strcat (numString, "6");
                     i += 3;
                 }
@@ -135,32 +277,9 @@ int myAtoi(char yytext[]){
                 strcat(numString, "9");
                 i += 4;
                 break;
-            case 'p':
-                digDecisAt = strlen(numString);
-                i += 5;
-                break;
         }
     }
     int num = atoi(numString);
     return atoi(numString);
 }
-
-char* plus(char* s1, char* s2){
-    printf("%s + %s\n", s1, s2);
-    return s1;
-
-}
-
-char* sub(char* s1, char* s2){
-    return s1;
-}
-
-char* divi(char* s1, char* s2){
-    return s1;
-}
-
-char* mult(char* s1, char* s2){
-    return s1;
-}
-
 
