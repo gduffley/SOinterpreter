@@ -86,13 +86,10 @@ void yyerror (char *s)  /* Called by yyparse on error */
 
 
 char* plus(char* s1, char* s2){
-    //printf("s1 : |%s|, s2: |%s|\n", s1, s2);
     if(isNum(s1) && isNum(s2)){
         int s1num = myAtoi(s1);
         int s2num = myAtoi(s2);
-        //printf("s1: %i, s2: %i\n", s1num, s2num);
         int sum = s1num + s2num;
-        //printf("sum: %i\n", sum);
         char* numStr = (char*) malloc(sizeof(char) *100);
         toString(sum, numStr);
         return numStr;
@@ -101,7 +98,7 @@ char* plus(char* s1, char* s2){
 
 }
 
-char* sub(char* s1, char* s2){
+char* divi(char* s1, char* s2){
     if(isNum(s1) && isNum(s2)){
         int s1num = myAtoi(s1);
         int s2num = myAtoi(s2);
@@ -110,27 +107,42 @@ char* sub(char* s1, char* s2){
         toString(dif, numStr);
         return numStr;
     }
-    /*char* ptr = (char*) malloc(sizeof(char) * (strlen(s1) + 1)); 
-    while( (ptr = strstr(s1, s2)) != NULL){
-        char* h1 = (char*) malloc(sizeof(char) * (strlen(s1) + 1));
-        char* h2 = (char*) malloc(sizeof(char) * (strlen(s1) + 1));
-        strcpy(h2, (ptr + strlen(s2)));
-        memmove(h1, s1, s1 - ptr);
-        printf("h1: %s\n", h1);
-        printf("h2: %s\n", h2);
-        int i = 0;
-        printf("s1: %s\n", s1);
-    }*/
     while( strRemoveAll(s1, s2));
     return s1;
 }
 
-char* divi(char* s1, char* s2){
-    return s1;
+char* sub(char* s1, char* s2){
+    if(isNum(s1) && isNum(s2)){
+        int s1num = myAtoi(s1);
+        int s2num = myAtoi(s2);
+        int div = s1num / s2num;
+        char* numStr = (char*) malloc(sizeof(char) *100);
+        toString(div, numStr);
+        return numStr;
+    }
+    if(strlen(s1) > strlen(s2)){
+        char* out = (char*) malloc(sizeof(char) *100);
+        strncpy(out, s1, strlen(s1) - strlen(s2));
+        return out;
+    }
+    else return "";
 }
 
 char* mult(char* s1, char* s2){
-    return s1;
+    if(isNum(s1) && isNum(s2)){
+        int s1num = myAtoi(s1);
+        int s2num = myAtoi(s2);
+        int prod = s1num * s2num;
+        char* numStr = (char*) malloc(sizeof(char) *100);
+        toString(prod, numStr);
+        return numStr;
+    }
+    if(strlen(s1) > strlen(s2)){
+        char* out = (char*) malloc(sizeof(char) *100);
+        strcpy(out, s1 + strlen(s2));
+        return out;
+    }
+    else return "";
 }
 
 int isNum(char* s){
