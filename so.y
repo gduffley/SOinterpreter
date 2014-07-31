@@ -21,6 +21,7 @@ char* divi(char* s1, char* s2);
 int matchesNum(char* s, char* num, int i);
 int isNum(char* s);
 char* toString(int n, char* numStr);
+int strRemoveAll(char *src,char *key);
 
 #define true 1
 #define false 0
@@ -101,6 +102,26 @@ char* plus(char* s1, char* s2){
 }
 
 char* sub(char* s1, char* s2){
+    if(isNum(s1) && isNum(s2)){
+        int s1num = myAtoi(s1);
+        int s2num = myAtoi(s2);
+        int dif = s1num - s2num;
+        char* numStr = (char*) malloc(sizeof(char) *100);
+        toString(dif, numStr);
+        return numStr;
+    }
+    /*char* ptr = (char*) malloc(sizeof(char) * (strlen(s1) + 1)); 
+    while( (ptr = strstr(s1, s2)) != NULL){
+        char* h1 = (char*) malloc(sizeof(char) * (strlen(s1) + 1));
+        char* h2 = (char*) malloc(sizeof(char) * (strlen(s1) + 1));
+        strcpy(h2, (ptr + strlen(s2)));
+        memmove(h1, s1, s1 - ptr);
+        printf("h1: %s\n", h1);
+        printf("h2: %s\n", h2);
+        int i = 0;
+        printf("s1: %s\n", s1);
+    }*/
+    while( strRemoveAll(s1, s2));
     return s1;
 }
 
@@ -281,5 +302,21 @@ int myAtoi(char* s){
     }
     int num = atoi(numString);
     return atoi(numString);
+}
+int strRemoveAll(char *src,char *key)
+{
+  while( *src )
+  {
+    char *k=key,*s=src;
+    while( *k && *k==*s ) ++k,++s;
+    if( !*k )
+    {
+      while( *s ) *src++=*s++;
+      *src=0;
+      return 1;
+    }
+    ++src;
+  }
+  return 0;
 }
 
